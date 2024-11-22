@@ -10,7 +10,7 @@ import {
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { BeatLoader } from "react-spinners";
-import { login } from "@/db/apiAuth";
+import { signup } from "@/db/apiAuth";
 import * as Yup from "yup";
 import Error from "./error";
 import useFetch from "@/hooks/use-fetch";
@@ -23,21 +23,21 @@ const Signup = () => {
     name: "",
     email: "",
     password: "",
-    profile_pic: "",
+    profile_pic: null,
   });
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const longLink = searchParams.get("createNew");
-  const { data, error, loading, fn: fnLogin } = useFetch(login, formData);
+  const { data, error, loading, fn: fnSignup } = useFetch(signup, formData);
   const { fetchUser } = UrlState();
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, files } = e.target;
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: files ? files[0] : value,
     }));
   };
 
@@ -48,22 +48,24 @@ const Signup = () => {
       navigate(`/dashboard?${longLink ? `createNew=${longLink}` : ""}`);
       fetchUser();
     }
-  }, [data, error]);
+  }, [error, loading]);
 
-  const handleLogin = async () => {
+  const handleSignup = async () => {
     setErrors([]);
     try {
       const schema = Yup.object().shape({
+        name: Yup.string().required("Name is required"),
         email: Yup.string()
           .email("Invalid Email")
           .required("Email is required"),
         password: Yup.string()
           .min(6, "Password must be at least 6 characters")
           .required("Password is required"),
+        profile_pic: Yup.mixed().required("Profile picture is required"),
       });
 
       await schema.validate(formData, { abortEarly: false });
-      await fnLogin();
+      await fnSignup();
     } catch (error) {
       const newErrors = {};
       error?.inner?.forEach((err) => {
@@ -123,8 +125,8 @@ const Signup = () => {
         {errors.password && <Error message={errors.password} />}
       </CardContent>
       <CardFooter>
-        <Button onClick={handleLogin}>
-          {loading ? <BeatLoader size="10" color="#36d7b7" /> : "Login"}
+        <Button onClick={handleSignup}>
+          {loading ? <BeatLoader size="10" color="#36d7b7" /> : "Signup"}
         </Button>
       </CardFooter>
     </Card>

@@ -7,6 +7,7 @@ import Dashboard from "./pages/dashboard";
 import Link from "./pages/link";
 import RedirectLink from "./pages/redirect-link";
 import UrlProvider from "./context";
+import RequireAuth from "./components/require-auth";
 
 const router = createBrowserRouter([
   {
@@ -22,15 +23,27 @@ const router = createBrowserRouter([
       },
       {
         path: "/dashboard",
-        element: <Dashboard />,
+        element: (
+          <RequireAuth>
+            <Dashboard />
+          </RequireAuth>
+        ),
       },
       {
         path: "/link/:id",
-        element: <Link />,
+        element: (
+          <RequireAuth>
+            <Link />
+          </RequireAuth>
+        ),
       },
       {
         path: "/:id",
-        element: <RedirectLink />,
+        element: (
+          <RequireAuth>
+            <RedirectLink />
+          </RequireAuth>
+        ),
       },
     ],
   },

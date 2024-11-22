@@ -39,7 +39,7 @@ const Landing = () => {
       </form>
       <img src="/banner.jpeg" alt="Banner" className="w-full my-11 md:px-11" />
 
-      <Accordion type="multiple" collapsible className="w-full md:px-11">
+      <Accordion type="multiple" className="w-full md:px-11">
         <AccordionItem value="item-1">
           <AccordionTrigger>
             How does the Trimrr URL shortener works?

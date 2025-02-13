@@ -27,7 +27,10 @@ const Header = () => {
     <>
       <nav className="p-4 flex justify-between items-center">
         <Link to={"/"}>
-          <img src="/logo.png" alt="Trimrr Logo" className="h-16" />
+          {/* <img src="/logo.png" alt="Trimrr Logo" className="h-16" /> */}
+          <h1 className="capitalize border-2 p-2 text-red-400 border-red-400 font-bold text-2xl">
+            URL Shortener
+          </h1>
         </Link>
         <div>
           {!user ? (
